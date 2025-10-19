@@ -153,15 +153,18 @@ def main():
         if not menu_principal:
             break
 
+        opcion_input = input("\nSelecciona una opción de menú: ") 
         try:
-            seleccion_menu = int(input("\nSelecciona una opción de menú: "))
+            seleccion_menu = int(opcion_input)
             if seleccion_menu == 0:
                 print("\nSaliendo del sistema...")
                 break
             id_menu = menu_principal[seleccion_menu - 1]["Id"]
             print("==============================================")
         except (ValueError, IndexError):
-            print("Opción inválida. Intenta nuevamente.")
+            mensaje_error = f"Opción inválida: {opcion_input} no es válido"
+            print(mensaje_error)
+            enviar_mensaje_whatsapp(mensaje_error)
             continue
         # =====================Menú principal =========================
 
@@ -171,8 +174,9 @@ def main():
             if not submenus:
                 break
 
+            opcion_input = input("\nSelecciona un submenú: ")  
             try:
-                seleccion_submenu = int(input("\nSelecciona un submenú: "))
+                seleccion_submenu = int(opcion_input)
                 if seleccion_submenu == 0:
                     print("\nSaliendo del sistema...")
                     return
@@ -181,15 +185,18 @@ def main():
                 nombre_submenu = submenus[seleccion_submenu - 1]["Sub_Menu_Opcion"]
                 print("==============================================")
             except (ValueError, IndexError):
-                print("Opción inválida. Intenta nuevamente.")
+                mensaje_error = f"Opción inválida: {opcion_input} no es válido"
+                print(mensaje_error)
+                enviar_mensaje_whatsapp(mensaje_error)
                 continue
             # ============================ Sub Menú  ==============================
 
             while True:
                 # ============================ Lista Sub Menú  ===================================
                 mostrar_lista_pasos(id_menu, nombre_submenu)
+                opcion_input = input("\nSelecciona una opción: ") 
                 try:
-                    accion = int(input("\nSelecciona una opción: "))
+                    accion = int(opcion_input)
                     if accion == 0:
                         print("\nSaliendo del sistema...")
                         return
@@ -197,7 +204,9 @@ def main():
                         break  
                     print("==============================================")
                 except ValueError:
-                    print("Opción inválida. Intenta nuevamente.")
+                    mensaje_error = f"Opción inválida: {opcion_input} no es válido"
+                    print(mensaje_error)
+                    enviar_mensaje_whatsapp(mensaje_error)
                 # ============================ Lista Sub Menú  ===================================
 
 #====================================MAIN PRINCIPAL============================================
