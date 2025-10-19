@@ -71,7 +71,7 @@ def enviar_mensaje_whatsapp(mensaje):
 
 #===================================MOSTRARMENU===============================================
 def mostrar_menu_principal():
-    print("\n=== MENÚ PRINCIPAL ===")
+    print("\nMENÚ PRINCIPAL:\n")
     resultados = ejecutar_sp("MostrarMenuPrincipal")
 
     if not resultados or resultados[0].get("Result") == 0:
@@ -79,7 +79,7 @@ def mostrar_menu_principal():
         print(mensaje_error)
         return None
 
-    texto_menu = "\n=== MENÚ PRINCIPAL ===\n"
+    texto_menu = "\nElije una opción.\nMenú Principal:\n\n"
     for i, menu in enumerate(resultados, start=1):
         print(f"{i}. {menu['Nombre']}")
         texto_menu += f"{i}. {menu['Nombre']}\n"
@@ -95,7 +95,7 @@ def mostrar_menu_principal():
 
 #==================================MOSTRARSUBMENU=============================================
 def mostrar_submenu(id_menu):
-    print("\n=== SUBMENÚ ===")
+    print("\nSUBMENÚ")
     resultados = ejecutar_sp("MostrarSubMenu", id_menu)
 
     if not resultados or resultados[0].get("Result") == 0:
@@ -103,7 +103,7 @@ def mostrar_submenu(id_menu):
         print(mensaje_error)
         return None
 
-    texto_submenu = "\n=== SUBMENÚ ===\n"
+    texto_submenu = "\nElije una opción.\nSubMenú de opciones:\n\n"
     for i, submenu in enumerate(resultados, start=1):
         print(f"{i}. {submenu['Sub_Menu_Opcion']}")
         texto_submenu += f"{i}. {submenu['Sub_Menu_Opcion']}\n"
@@ -120,7 +120,7 @@ def mostrar_submenu(id_menu):
 
 #====================================MOSTRARLISTA=============================================
 def mostrar_lista_pasos(id_menu, nombre_submenu):
-    print(f"\n=== LISTA DE PASOS: {nombre_submenu} ===")
+    print(f"\nLISTA DE PASOS: {nombre_submenu}")
     resultados = ejecutar_sp("MostrarListaPasos", id_menu, nombre_submenu)
 
     if not resultados or resultados[0].get("Result") == 0:
@@ -128,7 +128,7 @@ def mostrar_lista_pasos(id_menu, nombre_submenu):
         print(mensaje_error)
         return
 
-    texto_lista = f"\n=== LISTA DE PASOS: {nombre_submenu} ===\n"
+    texto_lista = f"\nA continuación se muestra la lista de pasos.\nLista de pasos para {nombre_submenu}\n\n"
     for paso in resultados:
         print(f"{paso['Numero_Paso']}: {paso['Paso']}")
         texto_lista += f"{paso['Numero_Paso']}: {paso['Paso']}\n"
