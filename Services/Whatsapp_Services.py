@@ -22,3 +22,4 @@ def EnviarMensajeWhatsApp(NumeroDestino, Mensaje):
         "status_code": response.status_code,
         "response": response.json()
     }
+
