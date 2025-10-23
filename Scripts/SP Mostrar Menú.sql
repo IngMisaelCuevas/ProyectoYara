@@ -42,7 +42,7 @@ BEGIN
             END IF;
 
             IF NOT EXISTS (SELECT 1 FROM Menu_Opciones WHERE Id = pIdMenu) THEN
-                SELECT 0 AS Result, 'El menú seleccionado no existe. Elija una opción válida.' AS Message;
+                SELECT 0 AS Result, 'El menú seleccionado no existe. Intente de nuevo.' AS Message;
                 LEAVE menu_block;
             END IF;
 
@@ -93,8 +93,6 @@ BEGIN
             END IF;
 
             SELECT 
-                1 AS Result,
-                'Lista de pasos cargada correctamente.' AS Message,
                 Numero_Paso,
                 Paso
             FROM sub_menu_lista
