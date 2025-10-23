@@ -1,6 +1,6 @@
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS ObtenerUltimoMensaje$$
+DROP PROCEDURE IF EXISTS ObtenerUltimoMensaje $$
 CREATE PROCEDURE ObtenerUltimoMensaje(
     IN pNumeroUsuario VARCHAR(20)
 )
@@ -14,6 +14,6 @@ BEGIN
       AND RowCreateAt >= NOW() - INTERVAL 5 MINUTE
     ORDER BY RowCreateAt DESC
     LIMIT 1;
-END$$
+END $$
 
 DELIMITER ;

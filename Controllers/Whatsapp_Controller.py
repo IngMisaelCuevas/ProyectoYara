@@ -59,7 +59,7 @@ def mostrar_submenu(id_menu):
     texto_submenu = "\nElije una opción.\nSubMenú de opciones:\n\n"
     for i, submenu in enumerate(resultados, start=1):
         texto_submenu += f"{i}. {submenu['Sub_Menu_Opcion']}\n"
-    texto_submenu += "\n0. Salir\n-1. Regresar al MENÚ PRINCIPAL"
+    texto_submenu += "\n0. Salir\n"
 
     return texto_submenu
 # ==============================================================================================
@@ -75,23 +75,22 @@ def mostrar_lista_pasos(id_menu, nombre_submenu):
     texto_lista = f"\nA continuación se muestra la lista de pasos.\nLista de pasos para {nombre_submenu}\n\n"
     for paso in resultados:
         texto_lista += f"{paso['Numero_Paso']}: {paso['Paso']}\n"
-    texto_lista += "\n0. Salir\n-1. Regresar"
+    texto_lista += "\n0. Salir"
 
     return texto_lista
 # ==============================================================================================
 
-
-
 def insertar_conversacion(numero_usuario, mensaje_usuario):
 
-    texto_respuesta, opcion_actual = obtener_respuesta_usuario(numero_usuario)
+
+    texto_respuesta, opcion_actual = obtener_respuesta_usuario(numero_usuario, mensaje_usuario)
 
     conn = conectar_db()
     cursor = conn.cursor()
     try:
         cursor.callproc("InsertarConversacion", [numero_usuario, mensaje_usuario, opcion_actual])
         conn.commit()
-        print(f"Conversación insertada para {numero_usuario}")
+
     except mysql.connector.Error as err:
         print(f"Error al insertar conversación: {err}")
     finally:
@@ -101,84 +100,45 @@ def insertar_conversacion(numero_usuario, mensaje_usuario):
     return texto_respuesta
 
 
-
-def obtener_respuesta_usuario(numero):
+def obtener_respuesta_usuario(numero, mensaje_actual):
     conn = conectar_db()
     cursor = conn.cursor(dictionary=True)
 
     try:
+
         cursor.callproc("ObtenerUltimoMensaje", [numero])
         ultimo = []
         for result in cursor.stored_results():
             ultimo.extend(result.fetchall())
 
+  
         if not ultimo:
             return mostrar_menu_principal(), "MostrarMenuPrincipal"
-        
+
         ultimo = ultimo[0]
         opcion_anterior = ultimo["Opcion_Menu"]
-        mensaje_usuario = ultimo["Mensaje_Usuario"]
+        mensaje_anterior = ultimo["Mensaje_Usuario"]
+
+        if mensaje_actual.strip() == "0":
+            return "Gracias por usar el sistema. ¡Hasta luego!", None
 
         if opcion_anterior == "MostrarMenuPrincipal":
-           
             try:
-                id_menu = int(mensaje_usuario)
+                id_menu = int(mensaje_actual)
                 return mostrar_submenu(id_menu), "MostrarSubMenu"
             except ValueError:
                 return mostrar_menu_principal(), "MostrarMenuPrincipal"
 
         elif opcion_anterior == "MostrarSubMenu":
             try:
-                id_menu = int(mensaje_usuario) 
-                nombre_submenu = "NombreDeSubMenu" 
-                return mostrar_lista_pasos(id_menu, nombre_submenu), "MostrarListaPasos"
-            except ValueError:
-                return mostrar_menu_principal(), "MostrarMenuPrincipal"
+ 
+                id_menu = int(mensaje_anterior)
 
-        elif opcion_anterior == "MostrarListaPasos":
-            return "Gracias por usar el sistema. Para continuar, selecciona una opción.", None
-
-        else:
-            return mostrar_menu_principal(), "MostrarMenuPrincipal"
-
-    finally:
-        cursor.close()
-        conn.close()
-def obtener_respuesta_usuario(numero):
-    conn = conectar_db()
-    cursor = conn.cursor(dictionary=True)
-
-    try:
-        cursor.callproc("ObtenerUltimoMensaje", [numero])
-        ultimo = []
-        for result in cursor.stored_results():
-            ultimo.extend(result.fetchall())
-
-        if not ultimo:
-            # No hay mensaje reciente → iniciar menú principal
-            return mostrar_menu_principal(), "MostrarMenuPrincipal"
-        
-        ultimo = ultimo[0]
-        opcion_anterior = ultimo["Opcion_Menu"]
-        mensaje_usuario = ultimo["Mensaje_Usuario"]
-
-        if opcion_anterior == "MostrarMenuPrincipal":
-            try:
-                id_menu = int(mensaje_usuario)
-                return mostrar_submenu(id_menu), "MostrarSubMenu"
-            except ValueError:
-                return mostrar_menu_principal(), "MostrarMenuPrincipal"
-
-        elif opcion_anterior == "MostrarSubMenu":
-            try:
-                id_menu = int(mensaje_usuario)  # Número del submenú elegido
-
-                # Obtener submenus del id_menu
                 submenus = ejecutar_sp("MostrarSubMenu", id_menu)
-                if not submenus or mensaje_usuario == "0":
+                if not submenus:
                     return mostrar_menu_principal(), "MostrarMenuPrincipal"
 
-                seleccion = int(mensaje_usuario) - 1
+                seleccion = int(mensaje_actual) - 1
                 if seleccion < 0 or seleccion >= len(submenus):
                     return mostrar_menu_principal(), "MostrarMenuPrincipal"
 
@@ -187,6 +147,7 @@ def obtener_respuesta_usuario(numero):
                 return mostrar_lista_pasos(id_menu, nombre_submenu), "MostrarListaPasos"
             except (ValueError, IndexError):
                 return mostrar_menu_principal(), "MostrarMenuPrincipal"
+
 
         elif opcion_anterior == "MostrarListaPasos":
             return "Gracias por usar el sistema. Para continuar, selecciona una opción.", None
