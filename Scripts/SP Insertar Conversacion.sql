@@ -19,5 +19,3 @@ BEGIN
 END $$
 
 DELIMITER ;
-
-SELECT * FROM Historial;
