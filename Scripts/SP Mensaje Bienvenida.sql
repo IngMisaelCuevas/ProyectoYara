@@ -4,7 +4,7 @@ DROP PROCEDURE IF EXISTS ObtenerMensajeBienvenida$$
 CREATE PROCEDURE ObtenerMensajeBienvenida()
 BEGIN
     SELECT Mensaje
-    FROM MensajeBienvenida
+    FROM mensajes_bienvenida
     LIMIT 1;
 END$$
 

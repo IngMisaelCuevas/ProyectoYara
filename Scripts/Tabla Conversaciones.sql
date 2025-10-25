@@ -6,10 +6,5 @@ CREATE TABLE Historial(
     RowCreateAt DATETIME
 );
 
-CREATE TABLE MensajeBienvenida (
-    Id INT AUTO_INCREMENT PRIMARY KEY,
-    Mensaje VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
-);
+SELECT * FROM Mensajes_bienvenida;
 
-INSERT INTO MensajeBienvenida (Mensaje)
-VALUES ('¡Bienvenido al chatbot de CJR Multiservicios. 😊');

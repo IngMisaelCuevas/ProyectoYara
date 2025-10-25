@@ -26,7 +26,9 @@ BEGIN
             SELECT 
                 Id,
                 Nombre
-            FROM Menu_Opciones;
+            FROM Menu_Opciones
+            WHERE 
+				Activo = 1;
             LEAVE menu_block;
         END IF;
 

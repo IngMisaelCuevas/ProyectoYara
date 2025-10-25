@@ -43,7 +43,7 @@ def mostrar_menu_principal():
 
     texto_menu = "\nElije una opción.\n\nMenú Principal:\n\n"
     for i, menu in enumerate(resultados, start=1):
-        texto_menu += f"{i}. {menu['Nombre']}\n"
+        texto_menu += f"{menu['Id']}. {menu['Nombre']}\n"
     texto_menu += "\n0. Salir"
 
     return texto_menu
@@ -117,7 +117,7 @@ def enviar_bienvenida(numero_destino):
         for result in cursor.stored_results():
             fila = result.fetchone()
             if fila:
-                mensaje_bienvenida = fila["Mensaje"]
+                mensaje_bienvenida = "🤨" + fila["Mensaje"]
     except mysql.connector.Error as err:
         print(f"Error al obtener mensaje de bienvenida: {err}")
     finally:
